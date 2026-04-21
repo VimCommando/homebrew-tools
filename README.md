@@ -7,8 +7,10 @@ Homebrew tap for VimCommando command-line tools.
 ```bash
 brew tap VimCommando/tools
 brew install espipe
+brew install kibob
 ```
 
 ## Formulae
 
 - `espipe`
+- `kibob`
