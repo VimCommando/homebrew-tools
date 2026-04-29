@@ -1,9 +1,9 @@
 class Espipe < Formula
   desc "Pipe NDJSON, JSON, or CSV documents into Elasticsearch"
   homepage "https://github.com/VimCommando/espipe"
-  url "https://github.com/VimCommando/espipe/archive/refs/tags/v0.2.0.tar.gz"
-  version "0.2.0"
-  sha256 "b9f2abc20b2383110b7af1ad0ff3014a329642c5a240c6bbc9fa6e68dbecba34"
+  url "https://github.com/VimCommando/espipe/archive/refs/tags/v0.3.0.tar.gz"
+  version "0.3.0"
+  sha256 "4fc8a064ead2af190551460fb595983e41c7d95ad0258213fb19226449799470"
   license "Apache-2.0"
 
   depends_on "rust" => :build
