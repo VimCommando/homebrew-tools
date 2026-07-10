@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUT_DIR="${ROOT_DIR}/dist/bottles"
 REMOTE_DIR="${REMOTE_DIR:-/tmp/homebrew-tools-bottles-$(date +%s)-$$}"
-FORMULAE=(espipe kibob)
+FORMULAE=(${BOTTLE_FORMULAE:-espipe kibob})
 
 if [[ -f "${ROOT_DIR}/.env" ]]; then
   set -a

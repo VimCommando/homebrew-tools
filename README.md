@@ -24,3 +24,5 @@ scripts/build-bottles.sh
 ```
 
 The script builds Apple Silicon bottles locally, builds Linux x86_64 bottles remotely inside `homebrew/brew` with Podman, writes artifacts to `dist/bottles`, and merges the generated bottle blocks into the formulae. Upload the generated `*.bottle*.tar.gz` files to the release URL configured by `BOTTLE_ROOT_URL`.
+
+Set `BOTTLE_FORMULAE=kibob` to rebuild bottles for a single formula.
