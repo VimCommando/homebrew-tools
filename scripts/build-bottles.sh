@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUT_DIR="${ROOT_DIR}/dist/bottles"
 REMOTE_DIR="${REMOTE_DIR:-/tmp/homebrew-tools-bottles-$(date +%s)-$$}"
-FORMULAE=(${BOTTLE_FORMULAE:-espipe kibob})
+read -r -a FORMULAE <<<"${BOTTLE_FORMULAE:-espipe kibob}"
 
 if [[ -f "${ROOT_DIR}/.env" ]]; then
   set -a
@@ -53,7 +53,7 @@ build_macos_bottles() {
         brew uninstall --force "${formula_name}"
       fi
       brew install --build-bottle "${formula_name}"
-      brew bottle --json --root-url "${BOTTLE_ROOT_URL}" "${formula_name}"
+      brew bottle --json --no-rebuild --root-url "${BOTTLE_ROOT_URL}" "${formula_name}"
     done
     mv ./*.bottle*.tar.gz ./*.json "${OUT_DIR}/"
   )
@@ -102,7 +102,7 @@ build_linux_bottles() {
         brew uninstall --force \"\${formula_name}\"
       fi
       brew install --build-bottle \"\${formula_name}\"
-      brew bottle --json --root-url \"${BOTTLE_ROOT_URL}\" \"\${formula_name}\"
+      brew bottle --json --no-rebuild --root-url \"${BOTTLE_ROOT_URL}\" \"\${formula_name}\"
     done
     cp ./*.bottle*.tar.gz ./*.json /work/
   '"
@@ -124,10 +124,25 @@ merge_bottle_blocks() {
   done
 }
 
+normalize_bottle_filenames() {
+  ruby -rjson -rfileutils -e '
+    ARGV.each do |json_path|
+      JSON.parse(File.read(json_path)).each_value do |metadata|
+        metadata.fetch("bottle").fetch("tags").each_value do |tag|
+          source = File.join(File.dirname(json_path), tag.fetch("local_filename"))
+          target = File.join(File.dirname(json_path), tag.fetch("filename"))
+          FileUtils.mv(source, target) unless source == target
+        end
+      end
+    end
+  ' "${OUT_DIR}"/*.json
+}
+
 build_macos_bottles
 stage_remote_repo
 build_linux_bottles
 merge_bottle_blocks
+normalize_bottle_filenames
 
 cat <<EOF
 Bottles are in:

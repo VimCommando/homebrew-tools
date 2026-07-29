@@ -1,16 +1,16 @@
 class Kibob < Formula
   desc "Git-inspired CLI tool for managing Kibana saved objects"
   homepage "https://github.com/VimCommando/kibana-object-manager"
-  url "https://github.com/VimCommando/kibana-object-manager/archive/eba97b0f3ded433392997ab896510149495e8072.tar.gz"
-  version "0.3.1"
-  sha256 "d0e9af8ad72611ad97c0bad7b7701be45fd4b3be1ab83b3323c0daee8021fa57"
+  url "https://github.com/VimCommando/kibana-object-manager/archive/440101a6af9340195fc4c4d0793f810df1411c7b.tar.gz"
+  version "0.4.0"
+  sha256 "12bebb6a3140aa0c5431284618c5d764bfa692bac1223269492d1b0db278544f"
   license "Apache-2.0"
 
   bottle do
     root_url "https://github.com/VimCommando/homebrew-tools/releases/download/bottles"
     rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_tahoe:  "e63e64650219f46bcb4e190cd417f42c5114bf66fe3eea75fec041edf49c6855"
-    sha256 cellar: :any,                 x86_64_linux: "74058e4032581f15e3e5ce5a28e895538283f71b8ad59bdbcfe264efddfe55ee"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:  "d21eb065adbdca8182673c9ddfb9eafd2259fd4d230f127d7ef99ec8b10df1da"
+    sha256 cellar: :any,                 x86_64_linux: "6b352c78c49f44eac6af7d4aa523de37d24941f61fd3850e316ab72929708d5e"
   end
 
   depends_on "pkgconf" => :build
