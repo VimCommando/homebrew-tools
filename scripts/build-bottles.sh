@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUT_DIR="${ROOT_DIR}/dist/bottles"
 REMOTE_DIR="${REMOTE_DIR:-/tmp/homebrew-tools-bottles-$(date +%s)-$$}"
-read -r -a FORMULAE <<<"${BOTTLE_FORMULAE:-espipe kibob}"
+read -r -a FORMULAE <<<"${BOTTLE_FORMULAE:-espipe jsrmx kibob}"
 
 if [[ -f "${ROOT_DIR}/.env" ]]; then
   set -a
@@ -31,7 +31,12 @@ TAP_FORMULA_PREFIX="${TAP_USER}/${TAP_REPO}"
 LOCAL_TAP_DIR="${LOCAL_TAP_DIR:-$(brew --repository)/Library/Taps/${TAP_USER}/homebrew-${TAP_REPO}}"
 
 mkdir -p "${OUT_DIR}"
-rm -f "${OUT_DIR}"/*.bottle*.tar.gz "${OUT_DIR}"/*.json
+for formula in "${FORMULAE[@]}"; do
+  rm -f \
+    "${OUT_DIR}/${formula}"-*.bottle*.tar.gz \
+    "${OUT_DIR}/${formula}"--*.bottle*.tar.gz \
+    "${OUT_DIR}/${formula}"--*.bottle.json
+done
 
 sync_local_tap() {
   mkdir -p "${LOCAL_TAP_DIR}"
@@ -112,9 +117,15 @@ build_linux_bottles() {
 }
 
 merge_bottle_blocks() {
+  local json_files=()
+  local formula
+  for formula in "${FORMULAE[@]}"; do
+    json_files+=("${OUT_DIR}/${formula}"--*.bottle.json)
+  done
+
   (
     cd "${ROOT_DIR}"
-    brew bottle --merge --write --no-commit "${OUT_DIR}"/*.json
+    brew bottle --merge --write --no-commit "${json_files[@]}"
   )
 
   local merged_tap_dir
@@ -125,6 +136,12 @@ merge_bottle_blocks() {
 }
 
 normalize_bottle_filenames() {
+  local json_files=()
+  local formula
+  for formula in "${FORMULAE[@]}"; do
+    json_files+=("${OUT_DIR}/${formula}"--*.bottle.json)
+  done
+
   ruby -rjson -rfileutils -e '
     ARGV.each do |json_path|
       JSON.parse(File.read(json_path)).each_value do |metadata|
@@ -135,7 +152,7 @@ normalize_bottle_filenames() {
         end
       end
     end
-  ' "${OUT_DIR}"/*.json
+  ' "${json_files[@]}"
 }
 
 build_macos_bottles
