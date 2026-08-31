@@ -1,15 +1,15 @@
 class Espipe < Formula
   desc "Pipe NDJSON, JSON, or CSV documents into Elasticsearch"
   homepage "https://github.com/VimCommando/espipe"
-  url "https://github.com/VimCommando/espipe/archive/refs/tags/v0.6.1.tar.gz"
-  version "0.6.1"
-  sha256 "3b27e5dc34c5fb661ecae28bc5ce4e960e6dc067e7982b462bc48f9e70341f7f"
+  url "https://github.com/VimCommando/espipe/archive/refs/tags/v0.7.0.tar.gz"
+  version "0.7.0"
+  sha256 "9df50c3419cdb593d22b16909dec7be6bf0114d4d01fe7578b602ef971f3cd36"
   license "Apache-2.0"
 
   bottle do
     root_url "https://github.com/VimCommando/homebrew-tools/releases/download/bottles"
-    sha256 cellar: :any_skip_relocation, arm64_tahoe:  "728fe9b4a98dc100e52e165e068ffd00eefa3a7b21d608bc2aff296f15cdf320"
-    sha256 cellar: :any,                 x86_64_linux: "c412ef6cc08200e3721f12a5fa924b722eec4274e93e4b503a4d634a85a67ce2"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:  "f7b8474c63c4564c8b47dd8787be0b8d225018f08d5147e8404da292242adc8a"
+    sha256 cellar: :any,                 x86_64_linux: "382860040e647b632cc558dab55a2973018492b5764a574e918c4c8ffe831381"
   end
 
   depends_on "pkgconf" => :build
