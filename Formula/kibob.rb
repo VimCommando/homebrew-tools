@@ -2,7 +2,6 @@ class Kibob < Formula
   desc "Git-inspired CLI tool for managing Kibana saved objects"
   homepage "https://github.com/VimCommando/kibana-object-manager"
   url "https://github.com/VimCommando/kibana-object-manager/archive/refs/tags/v0.4.1.tar.gz"
-  version "0.4.1"
   sha256 "8172bea51be9dfd91cf65adba615dc4f770749ef2e077611fc648a82ea0cd722"
   license "Apache-2.0"
 
