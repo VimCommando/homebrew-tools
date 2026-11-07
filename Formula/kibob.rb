@@ -1,22 +1,27 @@
 class Kibob < Formula
   desc "Git-inspired CLI tool for managing Kibana saved objects"
   homepage "https://github.com/VimCommando/kibana-object-manager"
-  url "https://github.com/VimCommando/kibana-object-manager/archive/refs/tags/v0.4.1.tar.gz"
-  sha256 "8172bea51be9dfd91cf65adba615dc4f770749ef2e077611fc648a82ea0cd722"
+  url "https://github.com/VimCommando/kibana-object-manager/archive/refs/tags/v0.5.0.tar.gz"
+  sha256 "5ffed330c17350b949095b47482f7a9612e951c5f709484d3d985b93177763c6"
   license "Apache-2.0"
 
-  depends_on "pkgconf" => :build
   depends_on "rust" => :build
-  depends_on "openssl@3"
 
   def install
-    ENV["OPENSSL_DIR"] = formula_opt_prefix("openssl@3")
-    ENV["OPENSSL_NO_VENDOR"] = "1"
-
     system "cargo", "install", *std_cargo_args(path: "crates/kibana-object-manager")
   end
 
   test do
     assert_match "kibob", shell_output("#{bin}/kibob --help")
+    assert_match version.to_s, shell_output("#{bin}/kibob --version")
+
+    (testpath/"export.ndjson").write <<~EOS
+      {"id":"release-smoke-dashboard","type":"dashboard","attributes":{"title":"Release Smoke"},"references":[]}
+    EOS
+    system bin/"kibob", "init", testpath/"export.ndjson", testpath/"project"
+    manifest = JSON.parse((testpath/"project/manifest/saved_objects.json").read)
+    assert_equal [{ "type" => "dashboard", "id" => "release-smoke-dashboard" }], manifest.fetch("objects")
+    object = JSON.parse((testpath/"project/objects/dashboard/Release Smoke.json").read)
+    assert_equal "Release Smoke", object.fetch("attributes").fetch("title")
   end
 end
